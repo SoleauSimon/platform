@@ -1,3 +1,5 @@
+/* biome-ignore-all lint: all */
+
 @import "tailwindcss";
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";

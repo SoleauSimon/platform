@@ -5,8 +5,10 @@
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
-		"lint": "turbo lint",
-		"format": "biome format --write"
+		"lint": "pnpm format",
+		"format": "biome check . --write",
+		"format:fix": "biome check . --fix --unsafe",
+		"format:ci": "biome ci"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.7",
