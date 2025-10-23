@@ -1,0 +1,12 @@
+#!/bin/bash
+
+INPUT_FILE="$1"
+START_LINE=$(head -n1 "$INPUT_FILE")
+PATTERN="^(feature|fix|improve|chore|docs|refactor|perf|style|ci): "
+
+if ! [[ "$START_LINE" =~ $PATTERN ]]; then
+    echo "❌ Commit message is invalid."
+    echo "The commit must start with one of the following prefixes: 'feature:', 'fix:', 'improve:', 'chore:', 'docs:', 'refactor:', 'test:', 'perf:', or 'style:'."
+    echo "Example: feature: add login button"
+    exit 1
+fi

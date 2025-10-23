@@ -1,0 +1,11 @@
+pre-commit:
+  jobs:
+    - name: format web
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: pnpm format
+      stage_fixed: true
+
+commit-msg:
+  scripts:
+    "template_checker":
+      runner: bash
