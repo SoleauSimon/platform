@@ -1,0 +1,66 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:base"],
+	"schedule": ["before 6am on monday"],
+	"timezone": "Europe/Paris",
+	"packageRules": [
+		{
+			"matchPackageNames": ["react", "react-dom"],
+			"groupName": "react packages"
+		},
+		{
+			"matchPackageNames": ["@types/react", "@types/react-dom"],
+			"groupName": "react types"
+		},
+		{
+			"matchPackageNames": ["next"],
+			"groupName": "next.js"
+		},
+		{
+			"matchPackageNames": ["typescript", "@types/node"],
+			"groupName": "typescript"
+		},
+		{
+			"matchPackageNames": ["turbo"],
+			"groupName": "turbo"
+		},
+		{
+			"matchPackageNames": ["@biomejs/biome"],
+			"groupName": "biome"
+		},
+		{
+			"matchPackageNames": ["tailwindcss", "@tailwindcss/postcss"],
+			"groupName": "tailwind"
+		},
+		{
+			"matchPackageNames": ["lucide-react"],
+			"groupName": "ui libraries"
+		},
+		{
+			"matchPackageNames": ["lefthook"],
+			"groupName": "git hooks"
+		}
+	],
+	"prConcurrentLimit": 3,
+	"prHourlyLimit": 2,
+	"labels": ["dependencies"],
+	"assignees": [],
+	"reviewers": [],
+	"vulnerabilityAlerts": {
+		"labels": ["security"],
+		"assignees": []
+	},
+	"lockFileMaintenance": {
+		"enabled": true,
+		"schedule": ["before 6am on monday"]
+	},
+	"rangeStrategy": "bump",
+	"bumpVersion": "patch",
+	"semanticCommits": "enabled",
+	"commitMessagePrefix": "chore:",
+	"commitMessageTopic": "{{depName}}",
+	"commitMessageExtra": "to {{newVersion}}",
+	"platform": "github",
+	"onboarding": true,
+	"requireConfig": "optional"
+}
