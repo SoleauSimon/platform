@@ -1,13 +1,3 @@
-# shadcn/ui monorepo template
-
-This template is for creating a monorepo with shadcn/ui.
-
-## Usage
-
-```bash
-pnpm dlx shadcn@latest init
-```
-
 ## Adding components
 
 To add components to your app, run the following command at the root of your `web` app:
@@ -32,6 +22,10 @@ import { Button } from "@workspace/ui/components/button"
 
 ## Add component from generator 
 
+To add a custom ui component 
+
 ```bash
 pnpm --filter @workspace/ui gen component
 ```
+
+This will place the ui components in the `packages/ui/src/components` directory.
