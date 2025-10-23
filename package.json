@@ -6,6 +6,7 @@
 		"build": "turbo build",
 		"dev": "turbo dev",
 		"lint": "pnpm format",
+		"type-check": "turbo type-check",
 		"format": "biome check . --write",
 		"format:fix": "biome check . --fix --unsafe",
 		"format:ci": "biome ci"
