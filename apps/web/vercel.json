@@ -1,0 +1,12 @@
+{
+	"version": 2,
+	"buildCommand": "cd ../.. && pnpm build --filter=web",
+	"outputDirectory": ".next",
+	"installCommand": "cd ../.. && pnpm install",
+	"framework": "nextjs",
+	"functions": {
+		"app/api/**/*.ts": {
+			"runtime": "nodejs20.x"
+		}
+	}
+}

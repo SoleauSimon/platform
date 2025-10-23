@@ -1,0 +1,26 @@
+{
+	"version": 2,
+	"builds": [
+		{
+			"src": "apps/web/package.json",
+			"use": "@vercel/next",
+			"config": {
+				"distDir": ".next"
+			}
+		}
+	],
+	"routes": [
+		{
+			"src": "/(.*)",
+			"dest": "apps/web/$1"
+		}
+	],
+	"functions": {
+		"apps/web/app/api/**/*.ts": {
+			"runtime": "nodejs20.x"
+		}
+	},
+	"env": {
+		"NODE_ENV": "production"
+	}
+}

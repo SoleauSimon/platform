@@ -7,7 +7,8 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+		"vercel-build": "next build"
 	},
 	"dependencies": {
 		"@workspace/ui": "workspace:*",
