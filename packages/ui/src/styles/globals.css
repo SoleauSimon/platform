@@ -120,10 +120,30 @@
 }
 
 @layer base {
-	* {
-		@apply border-border outline-ring/50;
-	}
-	body {
-		@apply bg-background text-foreground;
+	:root {
+		--primary: 209 100% 55%;
+		--primary-foreground: 0 0% 100%; /* #ffffff */
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 100%; /* #ffffff */
+		--button-transparent: 300 2% 11%;
+		--accent: 0 0% 100%; /* #ffffff */
+		--accent-foreground: 0 0% 100%; /* #ffffff */
+		--navigation: 0 0% 100%; /* #ffffff */
+		--navigation-hovered: 0 0% 96%;
+		--navigation-foreground: 0 0% 15%;
+		--sidebar-accent: 240 5% 65%;
+		--sidebar-accent-foreground: 240 5% 26%;
+		--navigation-system: 201 90% 27%;
+		--selected-system: 163 88% 20%;
+		--color-system: 0 0% 100%; /* #ffffff */
+		--button-default-border-color: 0 0% 85%; /* #d9d9d9 */
+		--button-default-bg: 0 0% 100%; /* #ffffff */
+		--button-default-bg-hovered: 0 0% 97%; /* #f8f8f8 */
+		--button-edit-bg: 249 68% 64%; /* #7765e2 */
+		--button-edit-foreground: 0 0% 100%; /* #FFF */
+		--button-success-bg: 174 63% 40%; /* #26a69a */
+		--button-success-foreground: 0 0% 100%; /* #FFF */
+		--avatar: 26 100% 48%; /* #f56a00 */
+		--avatar-foreground: 0 0% 100%; /* #ffffff */
 	}
 }
