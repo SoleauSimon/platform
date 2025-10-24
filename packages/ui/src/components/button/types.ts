@@ -22,4 +22,8 @@ export interface ButtonProps
 	icon?: LucideIcon;
 	/** Icon to display on the right side of the button */
 	iconRight?: LucideIcon;
+	/** Whether the button is in a loading state */
+	isLoading?: boolean;
+	/** Custom loader component to display when loading */
+	loader?: React.ReactNode;
 }

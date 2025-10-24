@@ -1,9 +1,22 @@
+"use client";
+
 import { Button } from "@workspace/ui/components/button";
 import { dayjs } from "@workspace/utils";
 import { ArrowLeft, ArrowRight, Heart, Menu, Rocket } from "lucide-react";
 
 export default function Page() {
 	const now = dayjs().format("DD/MM/YYYY HH:mm:ss");
+
+	// Fonction async pour tester le loading automatique
+	const handleAsyncClick = async () => {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+		alert("Action terminée !");
+	};
+
+	// Fonction sync pour tester le comportement normal
+	const handleSyncClick = () => {
+		alert("Action synchrone !");
+	};
 
 	return (
 		<div className="flex items-center justify-center min-h-svh">
@@ -53,6 +66,39 @@ export default function Page() {
 					<Button variant="destructive" size="small">
 						Test
 					</Button>
+
+					{/* Tests de la fonctionnalité de loading */}
+					<div className="flex flex-col gap-2 mt-4">
+						<h3 className="text-lg font-semibold">Tests de Loading</h3>
+
+						{/* Bouton avec loading automatique (Promise) */}
+						<Button icon={Rocket} onClick={handleAsyncClick} size="small">
+							Loading automatique (2s)
+						</Button>
+
+						{/* Bouton avec loading manuel */}
+						<Button icon={Heart} onClick={handleSyncClick} size="small">
+							Pas de loading
+						</Button>
+
+						{/* Bouton avec icône qui sera remplacée par le loader */}
+						<Button icon={Menu} onClick={handleAsyncClick} size="small">
+							Icône remplacée par loader
+						</Button>
+
+						{/* Bouton avec seulement une icône et loading */}
+						<Button icon={Heart} onClick={handleAsyncClick} size="small" />
+						<Button
+							icon={ArrowLeft}
+							iconRight={ArrowRight}
+							onClick={handleAsyncClick}
+							size="small"
+							center={true}
+						>
+							Test
+						</Button>
+					</div>
+
 					<div className="text-semibase">xxx</div>
 				</div>
 			</div>

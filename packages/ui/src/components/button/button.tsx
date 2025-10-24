@@ -1,5 +1,7 @@
+"use client";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@workspace/ui/lib/utils";
+import { LoaderCircle } from "lucide-react";
 import * as React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip";
@@ -20,10 +22,43 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			icon,
 			iconRight,
 			children,
+			isLoading: externalIsLoading,
+			loader,
+			onClick,
+			center,
+			fullWidth,
+			selected,
+			shape,
 			...props
 		},
 		ref,
 	) => {
+		const [internalIsLoading, setInternalIsLoading] = React.useState(false);
+
+		// Use external loading state if provided, otherwise use internal state
+		const isLoading = externalIsLoading ?? internalIsLoading;
+
+		// Handle click with promise detection
+		const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+			if (onClick) {
+				try {
+					const result = (onClick as any)(e);
+					// Check if result is a promise-like object
+					if (
+						result &&
+						typeof result === "object" &&
+						typeof result.then === "function"
+					) {
+						setInternalIsLoading(true);
+						result.finally(() => setInternalIsLoading(false));
+					}
+				} catch (error) {
+					// Handle synchronous errors
+					console.error("Button click error:", error);
+				}
+			}
+		};
+
 		// Validate that popover and tooltip are not used together
 		if (popoverContent && tooltipContent) {
 			return <div>Must use only one overlay at a time</div>;
@@ -69,17 +104,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		// Render button content with icons
 		const renderButtonContent = () => {
-			if (!hasChildren && !icon && !iconRight) {
+			if (!hasChildren && !icon && !iconRight && !isLoading) {
 				// No content at all
 				return null;
 			}
 
-			if (hasOnlyIcons) {
-				// Only icons, no text
+			if (hasOnlyIcons || (isLoading && !hasChildren)) {
+				// Only icons, no text (or loading without text)
 				return (
 					<>
-						{icon && React.createElement(icon, { className: "h-4 w-4" })}
-						{iconRight &&
+						{isLoading
+							? loader || <LoaderCircle className="h-4 w-4 animate-spin" />
+							: icon && React.createElement(icon, { className: "h-4 w-4" })}
+						{!isLoading &&
+							iconRight &&
 							React.createElement(iconRight, { className: "h-4 w-4" })}
 					</>
 				);
@@ -88,9 +126,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			// Has children (text), render with icons
 			return (
 				<>
-					{icon && React.createElement(icon, { className: "h-4 w-4" })}
+					{isLoading
+						? loader || <LoaderCircle className="h-4 w-4 animate-spin" />
+						: icon && React.createElement(icon, { className: "h-4 w-4" })}
 					{children}
-					{iconRight &&
+					{!isLoading &&
+						iconRight &&
 						React.createElement(iconRight, { className: "h-4 w-4" })}
 				</>
 			);
@@ -101,8 +142,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				ref={ref}
 				data-slot="button"
 				className={cn(
-					buttonVariants({ variant, size: getIconOnlySize(size), className }),
+					buttonVariants({
+						variant,
+						size: getIconOnlySize(size),
+						center,
+						fullWidth,
+						selected,
+						shape,
+						className,
+					}),
 				)}
+				onClick={handleClick}
+				disabled={isLoading || props.disabled}
 				{...props}
 			>
 				{renderButtonContent()}
