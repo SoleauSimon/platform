@@ -12,6 +12,8 @@
 		"clean": "rm -rf .turbo out"
 	},
 	"dependencies": {
+		"@workspace/ui": "workspace:*",
+		"@workspace/utils": "workspace:*",
 		"lucide-react": "catalog:",
 		"next": "catalog:",
 		"next-themes": "catalog:",
