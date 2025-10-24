@@ -14,29 +14,33 @@ export default function Page() {
 				{/* Test des différents cas d'usage des icônes */}
 				<div className="flex flex-col gap-2">
 					{/* Bouton avec icône à gauche */}
-					<Button icon={Rocket} size="sm">
+					<Button icon={Rocket} size="small">
 						Lancer
 					</Button>
 
 					{/* Bouton avec icône à droite */}
-					<Button iconRight={ArrowRight} size="sm">
+					<Button iconRight={ArrowRight} size="small">
 						Suivant
 					</Button>
 
 					{/* Bouton avec icônes des deux côtés */}
-					<Button icon={ArrowLeft} iconRight={ArrowRight} size="sm">
+					<Button icon={ArrowLeft} iconRight={ArrowRight} size="small">
 						Navigation
 					</Button>
 
-					{/* Bouton avec seulement une icône */}
-					<Button icon={Heart} size="icon" />
+					{/* Boutons avec seulement des icônes - test des tailles automatiques */}
+					<div className="flex gap-2 items-center">
+						<Button icon={Heart} size="small" />
+						<Button icon={Heart} size="default" />
+						<Button icon={Heart} size="large" />
+					</div>
 
 					{/* Bouton avec popover et icône */}
 					<Button
 						icon={Menu}
 						popoverContent={<div>Menu déroulant</div>}
 						popoverProps={{ side: "bottom" }}
-						size="sm"
+						size="small"
 					>
 						Menu
 					</Button>

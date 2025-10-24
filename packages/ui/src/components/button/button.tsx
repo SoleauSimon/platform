@@ -31,16 +31,50 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const Comp = asChild ? Slot : "button";
 
+		// Detect if button has only icons (no text)
+		const hasChildren = children && children !== "";
+		const hasOnlyIcons = !hasChildren && (icon || iconRight);
+
+		// Map regular sizes to onlyIcon sizes when button has only icons
+		const getIconOnlySize = (
+			currentSize:
+				| "small"
+				| "default"
+				| "large"
+				| "onlyIconDefault"
+				| "onlyIconSmall"
+				| "onlyIconXs"
+				| "onlyIconLarge"
+				| null
+				| undefined,
+		) => {
+			if (!hasOnlyIcons) return currentSize;
+
+			switch (currentSize) {
+				case "default":
+					return "onlyIconDefault";
+				case "small":
+					return "onlyIconSmall";
+				case "large":
+					return "onlyIconLarge";
+				case "onlyIconDefault":
+				case "onlyIconSmall":
+				case "onlyIconXs":
+				case "onlyIconLarge":
+					return currentSize; // Already an onlyIcon size
+				default:
+					return "onlyIconDefault";
+			}
+		};
+
 		// Render button content with icons
 		const renderButtonContent = () => {
-			const hasChildren = children && children !== "";
-
 			if (!hasChildren && !icon && !iconRight) {
 				// No content at all
 				return null;
 			}
 
-			if (!hasChildren && (icon || iconRight)) {
+			if (hasOnlyIcons) {
 				// Only icons, no text
 				return (
 					<>
@@ -66,7 +100,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			<Comp
 				ref={ref}
 				data-slot="button"
-				className={cn(buttonVariants({ variant, size, className }))}
+				className={cn(
+					buttonVariants({ variant, size: getIconOnlySize(size), className }),
+				)}
 				{...props}
 			>
 				{renderButtonContent()}
