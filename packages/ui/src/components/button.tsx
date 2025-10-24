@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@workspace/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import * as React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
@@ -37,56 +37,97 @@ const buttonVariants = cva(
 	},
 );
 
-function Button({
-	className,
-	variant,
-	size,
-	asChild = false,
-	popoverContent,
-	popoverProps,
-	tooltipContent,
-	tooltipProps,
-	...props
-}: React.ComponentProps<"button"> &
-	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-		popoverContent?: React.ReactNode;
-		popoverProps?: React.ComponentProps<typeof PopoverContent>;
-		tooltipContent?: React.ReactNode;
-		tooltipProps?: React.ComponentProps<typeof TooltipContent>;
-	}) {
-	const Comp = asChild ? Slot : "button";
-
-	const buttonElement = (
-		<Comp
-			data-slot="button"
-			className={cn(buttonVariants({ variant, size, className }))}
-			{...props}
-		/>
-	);
-
-	// If popover is provided, wrap with Popover
-	if (popoverContent) {
-		return (
-			<Popover>
-				<PopoverTrigger asChild>{buttonElement}</PopoverTrigger>
-				<PopoverContent {...popoverProps}>{popoverContent}</PopoverContent>
-			</Popover>
-		);
-	}
-
-	// If tooltip is provided, wrap with Tooltip
-	if (tooltipContent) {
-		return (
-			<Tooltip>
-				<TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
-				<TooltipContent {...tooltipProps}>{tooltipContent}</TooltipContent>
-			</Tooltip>
-		);
-	}
-
-	// Otherwise, return simple button
-	return buttonElement;
+export interface ButtonProps
+	extends React.ComponentProps<"button">,
+		VariantProps<typeof buttonVariants> {
+	/** Render as a child component instead of a button */
+	asChild?: boolean;
+	/** Content to display in a popover */
+	popoverContent?: React.ReactNode;
+	/** Props to pass to the PopoverContent component */
+	popoverProps?: React.ComponentProps<typeof PopoverContent>;
+	/** Content to display in a tooltip */
+	tooltipContent?: React.ReactNode;
+	/** Props to pass to the TooltipContent component */
+	tooltipProps?: React.ComponentProps<typeof TooltipContent>;
+	/** Convenience prop for popover side position */
+	popoverSide?: "top" | "right" | "bottom" | "left";
+	/** Convenience prop for tooltip side position */
+	tooltipSide?: "top" | "right" | "bottom" | "left";
 }
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+	(
+		{
+			className,
+			variant,
+			size,
+			asChild = false,
+			popoverContent,
+			popoverProps,
+			popoverSide,
+			tooltipContent,
+			tooltipProps,
+			tooltipSide,
+			...props
+		},
+		ref,
+	) => {
+		// Validate that popover and tooltip are not used together
+		if (popoverContent && tooltipContent) {
+			return <div>Must use only one overlay at a time</div>;
+		}
+
+		const Comp = asChild ? Slot : "button";
+
+		const buttonElement = (
+			<Comp
+				ref={ref}
+				data-slot="button"
+				className={cn(buttonVariants({ variant, size, className }))}
+				{...props}
+			/>
+		);
+
+		// If popover is provided, wrap with Popover
+		if (popoverContent) {
+			const mergedPopoverProps = {
+				...(popoverSide && { side: popoverSide }),
+				...popoverProps,
+			};
+
+			return (
+				<Popover>
+					<PopoverTrigger asChild>{buttonElement}</PopoverTrigger>
+					<PopoverContent {...mergedPopoverProps}>
+						{popoverContent}
+					</PopoverContent>
+				</Popover>
+			);
+		}
+
+		// If tooltip is provided, wrap with Tooltip
+		if (tooltipContent) {
+			const mergedTooltipProps = {
+				...(tooltipSide && { side: tooltipSide }),
+				...tooltipProps,
+			};
+
+			return (
+				<Tooltip>
+					<TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
+					<TooltipContent {...mergedTooltipProps}>
+						{tooltipContent}
+					</TooltipContent>
+				</Tooltip>
+			);
+		}
+
+		// Otherwise, return simple button
+		return buttonElement;
+	},
+);
+
+Button.displayName = "Button";
 
 export { Button, buttonVariants };
