@@ -1,3 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+catalog:
+  dayjs: ^1.11.18
+  typescript: ^5.9.2

@@ -1,0 +1,16 @@
+{
+	"name": "@workspace/utils",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"type-check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@workspace/typescript-config": "workspace:*",
+		"typescript": "catalog:"
+	},
+	"dependencies": {
+		"dayjs": "catalog:"
+	}
+}
