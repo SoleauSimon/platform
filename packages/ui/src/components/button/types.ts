@@ -1,4 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
+import type { LucideIcon } from "lucide-react";
 import type * as React from "react";
 import type { PopoverContent } from "../popover";
 import type { TooltipContent } from "../tooltip";
@@ -17,4 +18,8 @@ export interface ButtonProps
 	tooltipContent?: React.ReactNode;
 	/** Props to pass to the TooltipContent component */
 	tooltipProps?: React.ComponentProps<typeof TooltipContent>;
+	/** Icon to display on the left side of the button */
+	icon?: LucideIcon;
+	/** Icon to display on the right side of the button */
+	iconRight?: LucideIcon;
 }

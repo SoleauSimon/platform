@@ -17,6 +17,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			popoverProps,
 			tooltipContent,
 			tooltipProps,
+			icon,
+			iconRight,
+			children,
 			...props
 		},
 		ref,
@@ -28,13 +31,46 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		const Comp = asChild ? Slot : "button";
 
+		// Render button content with icons
+		const renderButtonContent = () => {
+			const hasChildren = children && children !== "";
+
+			if (!hasChildren && !icon && !iconRight) {
+				// No content at all
+				return null;
+			}
+
+			if (!hasChildren && (icon || iconRight)) {
+				// Only icons, no text
+				return (
+					<>
+						{icon && React.createElement(icon, { className: "h-4 w-4" })}
+						{iconRight &&
+							React.createElement(iconRight, { className: "h-4 w-4" })}
+					</>
+				);
+			}
+
+			// Has children (text), render with icons
+			return (
+				<>
+					{icon && React.createElement(icon, { className: "h-4 w-4" })}
+					{children}
+					{iconRight &&
+						React.createElement(iconRight, { className: "h-4 w-4" })}
+				</>
+			);
+		};
+
 		const buttonElement = (
 			<Comp
 				ref={ref}
 				data-slot="button"
 				className={cn(buttonVariants({ variant, size, className }))}
 				{...props}
-			/>
+			>
+				{renderButtonContent()}
+			</Comp>
 		);
 
 		// If popover is provided, wrap with Popover
