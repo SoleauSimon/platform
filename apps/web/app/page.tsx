@@ -9,7 +9,13 @@ export default function Page() {
 			<div className="flex flex-col items-center justify-center gap-4">
 				<h1 className="text-2xl font-bold">Ceci est un test pour Alexandre</h1>
 				<p className="text-sm text-gray-600">Date actuelle : {now}</p>
-				<Button size="sm">Button</Button>
+				<Button
+					popoverContent={<div>Popover</div>}
+					popoverProps={{ side: "left" }}
+					size="sm"
+				>
+					Button
+				</Button>
 			</div>
 		</div>
 	);
