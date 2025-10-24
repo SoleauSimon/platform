@@ -26,4 +26,10 @@ export interface ButtonProps
 	isLoading?: boolean;
 	/** Custom loader component to display when loading */
 	loader?: React.ReactNode;
+	/** Timer duration in seconds for countdown */
+	timer?: number;
+	/** Callback called when timer ends */
+	onTimerEnd?: () => void;
+	/** Whether the timer should start automatically when component mounts */
+	autoStart?: boolean;
 }

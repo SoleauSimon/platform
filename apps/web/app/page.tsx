@@ -18,6 +18,15 @@ export default function Page() {
 		alert("Action synchrone !");
 	};
 
+	// Fonction pour tester le timer
+	const handleTimerClick = () => {
+		alert("Timer démarré !");
+	};
+
+	const handleTimerEnd = () => {
+		alert("Timer terminé !");
+	};
+
 	return (
 		<div className="flex items-center justify-center min-h-svh">
 			<div className="flex flex-col items-center justify-center gap-4">
@@ -97,6 +106,53 @@ export default function Page() {
 						>
 							Test
 						</Button>
+					</div>
+
+					{/* Tests de la fonctionnalité de timer */}
+					<div className="flex flex-col gap-2 mt-4">
+						<h3 className="text-lg font-semibold">Tests de Timer</h3>
+
+						{/* Bouton avec timer de 5 secondes */}
+						<Button
+							icon={Rocket}
+							onClick={handleTimerClick}
+							timer={5}
+							onTimerEnd={handleTimerEnd}
+							size="small"
+						>
+							Timer 5s
+						</Button>
+
+						{/* Bouton avec timer de 10 secondes */}
+						<Button
+							icon={Heart}
+							onClick={handleTimerClick}
+							timer={10}
+							onTimerEnd={handleTimerEnd}
+							size="small"
+						>
+							Timer 10s
+						</Button>
+
+						{/* Bouton avec timer et icône qui sera remplacée */}
+						<Button
+							icon={Menu}
+							onClick={handleTimerClick}
+							timer={3}
+							onTimerEnd={handleTimerEnd}
+							size="small"
+						>
+							Timer avec icône
+						</Button>
+
+						{/* Bouton avec seulement une icône et timer */}
+						<Button
+							icon={Heart}
+							onClick={handleTimerClick}
+							timer={7}
+							onTimerEnd={handleTimerEnd}
+							size="small"
+						/>
 					</div>
 
 					<div className="text-semibase">xxx</div>

@@ -6,6 +6,7 @@ import * as React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip";
 import type { ButtonProps } from "./types";
+import useCountdownTimer from "./useCountdownTimer";
 import { buttonVariants } from "./variants";
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -25,6 +26,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			isLoading: externalIsLoading,
 			loader,
 			onClick,
+			timer,
+			onTimerEnd,
+			autoStart = false,
 			center,
 			fullWidth,
 			selected,
@@ -34,12 +38,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		ref,
 	) => {
 		const [internalIsLoading, setInternalIsLoading] = React.useState(false);
+		const [isMounted, setIsMounted] = React.useState(false);
 
 		// Use external loading state if provided, otherwise use internal state
 		const isLoading = externalIsLoading ?? internalIsLoading;
 
-		// Handle click with promise detection
+		// Timer functionality
+		const {
+			countdown,
+			isActive: isTimerActive,
+			start: startTimer,
+		} = useCountdownTimer(timer || 0, onTimerEnd || (() => {}));
+
+		// Handle hydration
+		React.useEffect(() => {
+			setIsMounted(true);
+		}, []);
+
+		// Auto-start timer if enabled
+		React.useEffect(() => {
+			if (autoStart && timer && timer > 0 && isMounted) {
+				startTimer();
+			}
+		}, [autoStart, timer, isMounted, startTimer]);
+
+		// Handle click with promise detection and timer
 		const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+			// Start timer if provided
+			if (timer && timer > 0) {
+				startTimer();
+			}
+
 			if (onClick) {
 				try {
 					const result = (onClick as any)(e);
@@ -102,14 +131,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			}
 		};
 
-		// Render button content with icons
+		// Render button content with icons and timer
 		const renderButtonContent = () => {
-			if (!hasChildren && !icon && !iconRight && !isLoading) {
+			// Show timer if active and mounted (avoid hydration mismatch)
+			const displayText =
+				isMounted && isTimerActive && countdown > 0
+					? `${countdown}s`
+					: children;
+			const hasContent = displayText && displayText !== "";
+
+			if (!hasContent && !icon && !iconRight && !isLoading) {
 				// No content at all
 				return null;
 			}
 
-			if (hasOnlyIcons || (isLoading && !hasChildren)) {
+			if (hasOnlyIcons || (isLoading && !hasContent)) {
 				// Only icons, no text (or loading without text)
 				return (
 					<>
@@ -123,14 +159,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				);
 			}
 
-			// Has children (text), render with icons
+			// Has content (text), render with icons
 			return (
 				<>
 					{isLoading
 						? loader || <LoaderCircle className="h-4 w-4 animate-spin" />
 						: icon && React.createElement(icon, { className: "h-4 w-4" })}
-					{children}
-					{iconRight &&
+					{displayText}
+					{!isLoading &&
+						iconRight &&
 						React.createElement(iconRight, { className: "h-4 w-4" })}
 				</>
 			);
@@ -152,7 +189,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 					}),
 				)}
 				onClick={handleClick}
-				disabled={isLoading || props.disabled}
+				disabled={isLoading || isTimerActive || props.disabled}
 				{...props}
 			>
 				{renderButtonContent()}
