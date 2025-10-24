@@ -10,21 +10,19 @@ export default function Page() {
 	// Fonction async pour tester le loading automatique
 	const handleAsyncClick = async () => {
 		await new Promise((resolve) => setTimeout(resolve, 2000));
-		alert("Action terminée !");
+		console.log("Action terminée !");
 	};
 
 	// Fonction sync pour tester le comportement normal
 	const handleSyncClick = () => {
-		alert("Action synchrone !");
+		console.log("Action synchrone !");
 	};
 
 	// Fonction pour tester le timer
-	const handleTimerClick = () => {
-		alert("Timer démarré !");
-	};
+	const handleTimerClick = () => {};
 
 	const handleTimerEnd = () => {
-		alert("Timer terminé !");
+		console.log("Timer terminé !");
 	};
 
 	return (

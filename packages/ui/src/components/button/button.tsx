@@ -43,12 +43,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		// Use external loading state if provided, otherwise use internal state
 		const isLoading = externalIsLoading ?? internalIsLoading;
 
-		// Timer functionality
+		// Timer functionality with stable callback
+		const stableOnTimerEnd = React.useCallback(() => {
+			onTimerEnd?.();
+		}, [onTimerEnd]);
+
 		const {
 			countdown,
 			isActive: isTimerActive,
 			start: startTimer,
-		} = useCountdownTimer(timer || 0, onTimerEnd || (() => {}));
+		} = useCountdownTimer(timer || 0, stableOnTimerEnd);
 
 		// Handle hydration
 		React.useEffect(() => {
@@ -173,6 +177,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			);
 		};
 
+		// State for progress bar animation
+		const [progressWidth, setProgressWidth] = React.useState(0);
+
+		// Animate progress bar when timer starts (only on client)
+		React.useEffect(() => {
+			if (isMounted && isTimerActive && timer && timer > 0) {
+				setProgressWidth(0);
+				// Use setTimeout to ensure the initial 0% is rendered before animating
+				const timeout = setTimeout(() => {
+					setProgressWidth(100);
+				}, 10);
+				return () => clearTimeout(timeout);
+			} else {
+				setProgressWidth(0);
+			}
+		}, [isMounted, isTimerActive, timer]);
+
 		const buttonElement = (
 			<Comp
 				ref={ref}
@@ -187,11 +208,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 						shape,
 						className,
 					}),
+					"relative overflow-hidden",
 				)}
 				onClick={handleClick}
 				disabled={isLoading || isTimerActive || props.disabled}
 				{...props}
 			>
+				{/* Progress bar for timer */}
+				{isMounted && isTimerActive && countdown > 0 && timer && (
+					<div
+						className="absolute inset-0 bg-primary/20"
+						style={{
+							width: `${progressWidth}%`,
+							transition: `width ${timer}s linear`,
+						}}
+					/>
+				)}
+
+				{/* Button content */}
 				{renderButtonContent()}
 			</Comp>
 		);

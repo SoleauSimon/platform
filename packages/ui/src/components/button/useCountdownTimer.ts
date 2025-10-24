@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Return value of the useCountdownTimer hook
@@ -32,6 +32,7 @@ const useCountdownTimer = (
 ): UseCountdownTimerReturn => {
 	const [countdown, setCountdown] = useState<number>(timer);
 	const [isActive, setIsActive] = useState<boolean>(false);
+	const hasCalledOnEnd = useRef<boolean>(false);
 
 	useEffect(() => {
 		if (!isActive || countdown <= 0) return; // early exit
@@ -41,7 +42,11 @@ const useCountdownTimer = (
 				if (prev <= 1) {
 					clearInterval(interval);
 					setIsActive(false);
-					onEnd();
+					if (!hasCalledOnEnd.current) {
+						hasCalledOnEnd.current = true;
+						console.log("Timer ended, calling onEnd");
+						onEnd();
+					}
 					return 0;
 				}
 				return prev - 1;
@@ -49,7 +54,14 @@ const useCountdownTimer = (
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [isActive, countdown, onEnd]);
+	}, [isActive, onEnd]);
+
+	// Reset hasCalledOnEnd when timer is restarted
+	useEffect(() => {
+		if (isActive) {
+			hasCalledOnEnd.current = false;
+		}
+	}, [isActive]);
 
 	return { countdown, isActive, start: () => setIsActive(true) };
 };
