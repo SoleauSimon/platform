@@ -130,8 +130,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 						? loader || <LoaderCircle className="h-4 w-4 animate-spin" />
 						: icon && React.createElement(icon, { className: "h-4 w-4" })}
 					{children}
-					{!isLoading &&
-						iconRight &&
+					{iconRight &&
 						React.createElement(iconRight, { className: "h-4 w-4" })}
 				</>
 			);
