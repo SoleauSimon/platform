@@ -44,7 +44,16 @@ export default function Page() {
 					>
 						Menu
 					</Button>
-					<Button>Test</Button>
+					<Button variant="ghostDefault" size="small">
+						Test
+					</Button>
+					<Button variant="primary" size="small">
+						Test
+					</Button>
+					<Button variant="destructive" size="small">
+						Test
+					</Button>
+					<div className="text-semibase">xxx</div>
 				</div>
 			</div>
 		</div>
